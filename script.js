@@ -19,7 +19,7 @@ const randomImages = ['./img/a.jpg', './img/b.jpg', './img/c.jpg', './img/d.jpg'
     './img/g.jpg', './img/h.jpg', './img/i.jpg', './img/j.jpg', './img/k.jpg', './img/l.png', './img/m.jpeg', 
     './img/n.jpg', './img/o.jpg', './img/p.jpg', './img/q.jpg', './img/r.jpg', './img/s.jpg', './img/t.jpg', 
     './img/u.jpg', './img/v.jpg', './img/w.jpg', './img/x.jpg', './img/y.jpg', './img/z.jpg']
-
+const congrats = 'con.jpg'
 typeInput.addEventListener("input", () => {
 
     const displayArray = typeDisplay.querySelectorAll("span");
