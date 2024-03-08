@@ -1,11 +1,27 @@
 const typeDisplay = document.getElementById("typeDisplay")
 const typeInput = document.getElementById("typeInput")
+const countDisplay = document.getElementById("countDisplay")
+const imgDisplay = document.getElementById("imgDisplay")
+const imgElement = imgDisplay.querySelector("img");
 
 const typeSound = new Audio('./audio/typing-sound.mp3')
 const wrongSound = new Audio('./audio/wrong.mp3')
 const correctSound = new Audio('./audio/correct.mp3')
 
+const numbers = Array.from({ length: 26 }, (_, index) => index).sort(() => Math.random() - 0.5);
+
+const randomWords = ['Aussie Meat Pies', 'Blueberry Muffins', 'Chicken Nuggets', 'Doughnuts with Sprinkles',
+    'Egg Sandwiches', 'Fruity Yogurt Parfait', 'Grilled Cheese Sandwiches', 'Hot Chocolates', 'Italian Meatballs', 
+    'Jellybeans', 'Kabobs', 'Lollipop', 'Mashed Potatoes', 'Nougat Candy','Omelette', 'Popsicles', 'Quiche', 
+    'Red Velvet Cupcakes', 'Spaghetti Bolognese', 'Trifle', 'Udon Noodles', 'Vanilla Ice Cream', 'Wonton Soup', 
+    'Xylitol Gummies', 'Yeast Rolls', 'Zebra Cake']
+const randomImages = ['./img/a.jpg', './img/b.jpg', './img/c.jpg', './img/d.jpg', './img/e.jpg', './img/f.jpg', 
+    './img/g.jpg', './img/h.jpg', './img/i.jpg', './img/j.jpg', './img/k.jpg', './img/l.png', './img/m.jpeg', 
+    './img/n.jpg', './img/o.jpg', './img/p.jpg', './img/q.jpg', './img/r.jpg', './img/s.jpg', './img/t.jpg', 
+    './img/u.jpg', './img/v.jpg', './img/w.jpg', './img/x.jpg', './img/y.jpg', './img/z.jpg']
+
 typeInput.addEventListener("input", () => {
+
     const displayArray = typeDisplay.querySelectorAll("span");
     const inputArray = typeInput.value.split("");
 
@@ -13,6 +29,9 @@ typeInput.addEventListener("input", () => {
     displayArray.forEach((span) => {
         const text = span.innerText;
         spanTextArray.push(text);
+        span.classList.add("neutral");
+        span.classList.remove("correct");
+        span.classList.remove("incorrect");
     });
 
     inputArray.forEach((char, index) => {
@@ -38,40 +57,39 @@ typeInput.addEventListener("input", () => {
             }
         });
         if (correct==true) {
+            typeInput.disabled = true;
             correctSound.play();
             correctSound.currentTime = 0;
             setTimeout(() => {
-                RenderRandomWord();
                 typeInput.value = "";
+                typeInput.disabled = false;
+                if (num < 25) {
+                    num = num+1
+                    RenderRandomWord(num);
+                } else {
+                    typeInput.disabled = true;
+                    typeInput.value = "Your time is: "+count;
+                    typeDisplay.innerText = "congratulations!";
+                    imgElement.src = congrats;
+                }
             }, 1000);
         }
     }
 
 });
 
-function RenderRandomWord() {
-    // const foodWords = ['apple', 'banana', 'cupcake', 'doughnut', 'eggplant', 'fries', 'grape', 'hamburger', 
-    // 'ice cream', 'juice', 'kiwi', 'lasagna', 'mango', 'noodles', 'orange', 'pizza', 'quiche', 'raspberry', 
-    // 'strawberry', 'taco', 'udon', 'vegetable', 'watermelon', 'xmas pudding', 'yogurt', 'zucchini'];
+function RenderRandomWord(n) {
 
-    const randomWords = ['Aussie Meat Pies', 'Blueberry Muffins', 'Chicken Nuggets', 'Doughnuts with Sprinkles',
-    'Egg Sandwiches', 'Fruity Yogurt Parfait', 'Grilled Cheese Sandwiches', 'Hot Chocolates',
-    'Italian Meatballs', 'Jellybeans', 'Kabobs', 'Lollipop', 'Mashed Potatoes', 'Nougat Candy','Omelette', 
-    'Popsicles', 'Quiche', 'Red Velvet Cupcakes', 'Spaghetti Bolognese', 'Trifle', 'Udon Noodles', 
-    'Vanilla Ice Cream', 'Wonton Soup', 'Xylitol Gummies', 'Yeast Rolls', 'Zebra Cake']
-    const randomImages = ['./img/a.jpg', './img/b.jpg', './img/c.jpg', './img/d.jpg', './img/e.jpg', './img/f.jpg', 
-    './img/g.jpg', './img/h.jpg', './img/i.jpg', './img/j.jpg', './img/k.jpg', './img/l.png', './img/m.jpeg', 
-    './img/n.jpg', './img/o.jpg', './img/p.jpg', './img/q.jpg', './img/r.jpg', './img/s.jpg', './img/t.jpg', 
-    './img/u.jpg', './img/v.jpg', './img/w.jpg', './img/x.jpg', './img/y.jpg', './img/z.jpg', ]
-    const randomIndex = Math.floor(Math.random() * randomWords.length);
-    const randomWord = randomWords[randomIndex];
-    const randomImage = randomImages[randomIndex];
+    const index = numbers[n];
+    const word = randomWords[index];
+    const image = randomImages[index];
 
-    const imgElement = imgDisplay.querySelector("img");
-    imgElement.src = randomImage;
+    imgElement.src = image;
 
     typeDisplay.innerText = "";
-    let fragmented = randomWord.split("");
+    typeInput.focus();
+    countDisplay.innerText = (n + 1) + "/26";
+    let fragmented = word.split("");
     fragmented.forEach((f)=>{
         const tagSpan = document.createElement("span");
         tagSpan.innerText = f;
@@ -80,4 +98,14 @@ function RenderRandomWord() {
 
 };
 
-RenderRandomWord();
+let num = 24;
+RenderRandomWord(num);
+
+let count = 0;
+function countUp() {
+    count++;
+}
+const intervalId = setInterval(countUp, 1000);
+setTimeout(() => {
+    clearInterval(intervalId);
+}, 1000000);
