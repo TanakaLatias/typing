@@ -98,7 +98,7 @@ function RenderRandomWord(n) {
 
 };
 
-let num = 24;
+let num = 0;
 RenderRandomWord(num);
 
 let count = 0;
